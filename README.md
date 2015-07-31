@@ -34,8 +34,8 @@ For more information on how to build the library with other tools (Gradle, Sbt, 
 
 ```java
 OAuth2Client client = OAuth2Client.withClientCredentialsGrant(
-    "username", "password", "client_id", "client_secret",
-    "scope_one,scope_two", "http://host/oauth/access_token"
+    "client_id", "client_secret", "scope_one,scope_two",
+    "http://host/oauth/access_token"
 );
 
 AccessToken token = client.getAccessToken();
