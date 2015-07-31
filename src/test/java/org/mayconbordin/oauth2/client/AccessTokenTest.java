@@ -24,8 +24,7 @@ public class AccessTokenTest extends OAuth2BaseTest {
     public void testGetResource() throws Exception {
         System.out.println("testGetResource");
         
-        OAuth2Client client = new OAuth2Client(
-            OAuth2Constants.GRANT_PASSWORD,
+        OAuth2Client client = OAuth2Client.withPasswordGrant(
             "oauth_user", "oauth_user_password",
             "client1id", "client1secret",
             "http://localhost/api/oauth/access_token");
@@ -43,8 +42,7 @@ public class AccessTokenTest extends OAuth2BaseTest {
     public void testRefresh() throws Exception {
         System.out.println("testRefresh");
         
-        OAuth2Client client = new OAuth2Client(
-            OAuth2Constants.GRANT_PASSWORD,
+        OAuth2Client client = OAuth2Client.withPasswordGrant(
             "oauth_user", "oauth_user_password",
             "client1id", "client1secret",
             "http://localhost/api/oauth/access_token");

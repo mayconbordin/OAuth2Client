@@ -21,8 +21,7 @@ public class OAuth2ClientTest extends OAuth2BaseTest {
     public void testGetAccessTokenGrantPassword() throws Exception {
         System.out.println("testGetAccessTokenGrantPassword");
 
-        OAuth2Client client = new OAuth2Client(
-            OAuth2Constants.GRANT_PASSWORD,
+        OAuth2Client client = OAuth2Client.withPasswordGrant(
             "oauth_user", "oauth_user_password",
             "client1id", "client1secret",
             "http://localhost/api/oauth/access_token");
@@ -39,8 +38,7 @@ public class OAuth2ClientTest extends OAuth2BaseTest {
     public void testGetAccessTokenGrantPasswordWrongUserCredentials() throws Exception {
         System.out.println("testGetAccessTokenGrantPasswordWrongUserCredentials");
 
-        OAuth2Client client = new OAuth2Client(
-            OAuth2Constants.GRANT_PASSWORD,
+        OAuth2Client client = OAuth2Client.withPasswordGrant(
             "oauth_user_wrong", "oauth_user_password",
             "client1id", "client1secret",
             "http://localhost/api/oauth/access_token");
@@ -52,8 +50,7 @@ public class OAuth2ClientTest extends OAuth2BaseTest {
     public void testGetAccessTokenGrantClientCredentials() throws Exception {
         System.out.println("testGetAccessTokenGrantClientCredentials");
 
-        OAuth2Client client = new OAuth2Client(
-            OAuth2Constants.GRANT_CLIENT_CREDENTIALS,
+        OAuth2Client client = OAuth2Client.withClientCredentialsGrant(
             "client1id", "client1secret",
             "http://localhost/api/oauth/access_token");
         
@@ -69,8 +66,7 @@ public class OAuth2ClientTest extends OAuth2BaseTest {
     public void testGetAccessTokenGrantClientCredentialsWrongCredentials() throws Exception {
         System.out.println("testGetAccessTokenGrantClientCredentialsWrongCredentials");
 
-        OAuth2Client client = new OAuth2Client(
-            OAuth2Constants.GRANT_CLIENT_CREDENTIALS,
+        OAuth2Client client = OAuth2Client.withClientCredentialsGrant(
             "client1id_wrong", "client1secret",
             "http://localhost/api/oauth/access_token");
         
@@ -81,8 +77,7 @@ public class OAuth2ClientTest extends OAuth2BaseTest {
     public void testGetAccessTokenGrantClientCredentialsWrongUrl() throws Exception {
         System.out.println("testGetAccessTokenGrantClientCredentialsMissingFields");
 
-        OAuth2Client client = new OAuth2Client(
-            OAuth2Constants.GRANT_CLIENT_CREDENTIALS,
+        OAuth2Client client = OAuth2Client.withClientCredentialsGrant(
             "client1id", "client1secret",
             "http://localhost/api/oauth/access_token_wrong");
         
