@@ -55,5 +55,5 @@ public class AccessTokenTest extends OAuth2BaseTest {
         assertEquals(accessTokenRefreshResponse.get(OAuth2Constants.TOKEN_TYPE), newToken.getTokenType());
         assertEquals(accessTokenRefreshResponse.get(OAuth2Constants.REFRESH_TOKEN), newToken.getRefreshToken());
     }
-    
+
 }

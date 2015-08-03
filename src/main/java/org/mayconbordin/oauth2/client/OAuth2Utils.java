@@ -1,7 +1,7 @@
 package org.mayconbordin.oauth2.client;
 
 import java.io.IOException;
-import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -30,13 +30,14 @@ public class OAuth2Utils {
     public static String getProtectedResource(AccessToken token, String url) throws OAuth2Exception {
         HttpUriRequest request = new OAuth2RequestBuilder(HttpGet.METHOD_NAME, url, token).build();
 
-        HttpResponse response = null;
+        CloseableHttpResponse response = null;
         String responseString = "";
         
         try {
             response = getHttpClient().execute(request);
             int code = response.getStatusLine().getStatusCode();
             responseString = ContentHandler.readHttpEntity(response.getEntity());
+            response.close();
             
             if (code >= 400) {
                 throw OAuth2Exception.fromHttpCode(code, responseString);
@@ -59,26 +60,28 @@ public class OAuth2Utils {
     public static AccessToken getAccessToken(OAuth2Config config) throws OAuth2Exception {
         HttpUriRequest request = new OAuth2RequestBuilder(HttpPost.METHOD_NAME, config).build();
         
-        HttpResponse response   = null;
+        CloseableHttpResponse response = null;
         AccessToken accessToken = null;
         
         try {
             response = getHttpClient().execute(request);
             int code = response.getStatusLine().getStatusCode();
-            
+
             if (code >= 400) {
+                response.close();
                 request = new OAuth2RequestBuilder(HttpPost.METHOD_NAME, config)
                         .authorization(config.getUsername(), config.getPassword())
                         .build();
 
                 response = getHttpClient().execute(request);
                 code = response.getStatusLine().getStatusCode();
-                
+
                 if (code >= 400) {
+                    response.close();
                     request = new OAuth2RequestBuilder(HttpPost.METHOD_NAME, config)
                             .authorization(config.getClientId(), config.getClientSecret())
                             .build();
-
+                    
                     response = getHttpClient().execute(request);
                     code = response.getStatusLine().getStatusCode();
 
@@ -89,6 +92,7 @@ public class OAuth2Utils {
             }
             
             accessToken = new AccessToken(ContentHandler.handleResponse(response));
+            response.close();
         } catch (IOException e) {
             LOG.error("IO error: " + e.getMessage());
             throw new OAuth2Exception("An error ocurred while executing the request.", e);
@@ -108,7 +112,7 @@ public class OAuth2Utils {
     public static AccessToken refreshAccessToken(AccessToken token, OAuth2Config config) throws OAuth2Exception {
         HttpUriRequest request = new OAuth2RequestBuilder(HttpPost.METHOD_NAME, config, token).build();
         
-        HttpResponse response = null;
+        CloseableHttpResponse response = null;
         AccessToken accessToken     = null;
         
         try {
@@ -116,6 +120,8 @@ public class OAuth2Utils {
             int code = response.getStatusLine().getStatusCode();
             
             if (code >= 400) {
+                response.close();
+                
                 request = new OAuth2RequestBuilder(HttpPost.METHOD_NAME, config)
                         .authorization(config.getClientId(), config.getClientSecret())
                         .build();
